@@ -1,0 +1,50 @@
+---
+title: "Equipo1"
+author: "DenniseL"
+date: "29/4/2021"
+output: html_document
+---
+
+```{r, echo=FALSE, message=FALSE, warning=FALSE}
+#remotes::install_github("cienciadedatos/datos")
+```
+
+
+```{r, echo=FALSE, message=FALSE, warning=FALSE}
+library(datos)
+library(tidyverse)
+Pingus<-datos::pinguinos
+Papúa<-Pingus%>%filter(especie=='Papúa')
+```
+
+##GRAFICA
+```{r}
+Papúa_mod <- ggplot(Papúa, 
+            aes(x=masa_corporal_g, y=largo_aleta_mm))+
+       geom_point(alpha = 0.1)+
+       geom_smooth(method="lm")+
+       xlab("Masa Corporal (gr)")+
+       ylab("Longitud Aleta")
+Papúa_mod
+```
+
+```{r}
+modelo_Papúa<- lm(data=Papúa,
+                       masa_corporal_g ~ largo_aleta_mm)
+modelo_Papúa
+```
+```{r}
+summary(modelo_Papúa)
+TablaPapúa <- broom::tidy(modelo_Papúa)
+```
+##TABLA MODELO
+```{r}
+#install.packages("kableExtra")
+library(kableExtra)
+kbl(TablaPapúa, 
+    booktabs = T, caption = "Demo Table") %>% #Titulo
+    kable_styling(latex_options = c("striped", "hold_position"),
+                full_width = F)
+```
+
+
